@@ -156,7 +156,14 @@ static void SocketCallback(CFSocketRef socket, CFSocketCallBackType type, CFData
         NSNumber *protocolFamily = protocols[idx];
         OpenVPNPacket *packet = [[OpenVPNPacket alloc] initWithPacketFlowData:data protocolFamily:protocolFamily];
         
-        CFSocketSendData(socket, NULL, (CFDataRef)packet.vpnData, 0.05);
+//        CFSocketSendData(socket, NULL, (CFDataRef)packet.vpnData, 0.05);
+        
+        if (packet.vpnData != NULL) {
+            CFSocketSendData(socket, NULL, (__bridge CFDataRef)packet.vpnData, 0.05);
+        } else {
+            // handle the case where packet.vpnData cannot be cast to CFDataRef
+        }
+
     }];
 }
 
